@@ -43,15 +43,12 @@ module.exports = {
 
 if (!module.parent) {
   process.on('message', function (event) {
-    // just a double check
-    if (has(event.language)) {
-      run(event).then(function (output) {
-        process.send(output);
-      }).catch(function (error) {
-        console.error(error);
-      }).then(function () {
-        process.exit(0);
-      });
-    }
+    run(event).then(function (output) {
+      process.send(output);
+    }).catch(function (error) {
+      console.error(error);
+    }).then(function () {
+      process.exit(0);
+    });
   });
 }
