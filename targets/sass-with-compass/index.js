@@ -6,7 +6,7 @@
 
 var fs = require('fs');
 var path = require('path');
-var Gaze = require('gaze');
+var spawn = require('child_process').spawn;
 
 var output = path.join(__dirname, 'output');
 
@@ -14,29 +14,39 @@ fs.mkdir(output, function () {});
 
 module.exports = function (resolve, reject, data) {
   // Watch all .js files/dirs in process.cwd()
-  var targetOutput = path.join(output, 'stylesheets', data.url, data.revision + '.css');
-  var gaze = new Gaze(targetOutput, function(error) {
-    if (error) {
-      return reject(error);
-    }
-
-    this.on('changed', function(filepath) {
-      console.log('gaze detected change on ' + filepath);
-      fs.readFile(filepath, 'utf8', function (error, data) {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(data);
-          gaze.close();
-          fs.unlink(filepath);
-        }
-      });
-    });
-  });
+  var targetFile = path.join(output, 'stylesheets', data.url, data.revision + '.css');
+  var sourceFile = path.join(output, 'sass', data.url, data.revision + '.scss');
+  console.log('looking for ' + targetFile);
 
   fs.mkdir(path.join(output, 'sass', data.url), function () {
-    fs.writeFile(path.join(output, 'sass', data.url, data.revision + '.scss'), data.source, function (error, result) {
+    fs.writeFile(sourceFile, data.source, function (error, result) {
       console.log('file written', error, result);
+      console.log('compass', ['compile', sourceFile]);
+      var compass = spawn('compass', ['compile', sourceFile], {
+        cwd: output
+      });
+
+      compass.stdout.on('data', function (data) {
+        console.log('stdout: ' + data);
+      });
+
+      compass.stderr.on('data', function (data) {
+        console.log('stderr: ' + data);
+        reject(data.toString());
+      });
+
+      compass.on('close', function (code) {
+        console.log('child process exited with code ' + code);
+
+        // if okay, then try to read the target
+        fs.readFile(targetFile, 'utf8', function (error, data) {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(data);
+          }
+        });
+      });
     });
   });
 
