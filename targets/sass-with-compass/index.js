@@ -13,9 +13,9 @@ var output = path.join(__dirname, 'output');
 fs.mkdir(output, function () {});
 
 module.exports = function (resolve, reject, data) {
-  // Watch all .js files/dirs in process.cwd()
-  var targetFile = path.join(output, 'stylesheets', data.url, data.revision + '.css');
-  var sourceFile = path.join(output, 'sass', data.url, data.revision + '.scss');
+  // FIXME ensure the data.url and revision are legit
+  var targetFile = path.join(output, 'stylesheets', data.url + '.' + data.revision + '.css');
+  var sourceFile = path.join(output, 'sass', data.url + '.' + data.revision + '.scss');
   console.log('looking for ' + targetFile);
 
   fs.mkdir(path.join(output, 'sass', data.url), function () {
