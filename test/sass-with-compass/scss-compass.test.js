@@ -1,6 +1,7 @@
 'use strict';
 
 var zmq = require('zmq');
+var fs = require('fs');
 
 // socket to talk to server
 console.log('Connecting to processor server');
@@ -15,8 +16,10 @@ requester.on('message', function (reply) {
 
 requester.connect('tcp://localhost:5555');
 
-console.log('Sending request…');
-requester.send(JSON.stringify({ language: 'markdown', source: '# Heading 1\n\nThis *is* a processor.' }));
+console.log('Sending request...');
+fs.readFile('./sample.scss', 'utf8', function (error, source) {
+  requester.send(JSON.stringify({ language: 'sass-with-compass', source: source, url: 'abc', revision: 12 }));
+});
 
 process.on('SIGINT', function() {
   requester.close();

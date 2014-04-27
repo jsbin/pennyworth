@@ -39,7 +39,7 @@ function run(event) {
 
 module.exports = {
   has: has
-}
+};
 
 if (!module.parent) {
   process.on('message', function (event) {

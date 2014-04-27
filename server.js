@@ -44,7 +44,7 @@ responder.on('message', function (rawreq) {
           console.error(req.language + ' processor timeout');
           child.kill();
           reject({ error: 'timeout', data: null });
-        }, 1000);
+        }, 10000);
 
         child.on('stderr', function (data) {
           console.error(req.language + ' processor errors');
