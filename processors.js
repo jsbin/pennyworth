@@ -13,8 +13,6 @@ fs.readdir(targets, function (error, files) {
     process.exit(1);
   }
 
-  console.log('Pre-processors found: ' + files.length);
-
   files.forEach(function (file) {
     if (file.indexOf('.') !== 0) {
       try {
@@ -26,6 +24,8 @@ fs.readdir(targets, function (error, files) {
       }
     }
   });
+
+  console.log('Processors available: ' + available.sort().join(' '));
 });
 
 function has(language) {

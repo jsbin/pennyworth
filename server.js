@@ -11,13 +11,16 @@ var Promise = require('rsvp').Promise;
 var fork = require('child_process').fork;
 var processors = require('./processors');
 
-responder.bind('tcp://*:5555', function (error) {
-  if (error) {
-    console.log(error);
-  } else {
-    console.log('Ready on 5555...');
-  }
-});
+function start() {
+  responder.bind('tcp://*:5555', function (error) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Ready on 5555...');
+      bind();
+    }
+  });
+}
 
 function json(str) {
   return new Promise(function (resolve) {
@@ -31,56 +34,74 @@ function json(str) {
     { language: "scss", data: "..." }
     { language: "scss-compass", data: "..." }
 */
-responder.on('message', function (rawreq) {
-  json(rawreq).then(function (req) {
+function bind() {
+  responder.on('message', function (rawreq) {
+    json(rawreq).then(function (req) {
 
-    console.log('message in: ' + req);
-    if (processors.has(req.language)) {
-      var p = new Promise(function (resolve, reject) {
-        var child = fork('./processors');
-        var output = '';
+      console.log('message in: ' + req);
+      if (processors.has(req.language)) {
+        var p = new Promise(function (resolve, reject) {
+          var child = fork('./processors');
+          var output = '';
 
-        var timeout = setTimeout(function () {
-          console.error(req.language + ' processor timeout');
-          child.kill();
-          reject({ error: 'timeout', data: null });
-        }, 10000);
+          var timeout = setTimeout(function () {
+            console.error(req.language + ' processor timeout');
+            child.kill();
+            reject({ error: 'timeout', data: null });
+          }, 10000);
 
-        child.on('error', function (data) {
-          reject({ error: 'errors', data: data });
-        });
-
-        child.on('message', function (message) {
-          output += message;
-        });
-
-        child.on('exit', function () {
-          clearTimeout(timeout);
-          json(output).then(function (result) {
-            if (result.error) {
-              reject(result);
-            } else {
-              resolve(result);
-            }
-          }).catch(function () {
-            console.error('corrupted result from ' + req.language);
+          child.on('error', function (data) {
+            reject({ error: 'errors', data: data });
           });
+
+          child.on('message', function (message) {
+            output += message;
+          });
+
+          child.on('exit', function () {
+            clearTimeout(timeout);
+            json(output).then(function (result) {
+              if (result.error) {
+                reject(result);
+              } else {
+                resolve(result);
+              }
+            }).catch(function () {
+              console.error('corrupted result from ' + req.language);
+            });
+          });
+
+          child.send(req);
         });
 
-        child.send(req);
-      });
-
-      p.then(function (result) {
-        responder.send(JSON.stringify({ error: null, data: result }));
-      }).catch(function (error) {
-        responder.send(JSON.stringify(error));
-      });
-    }
-  }).catch(function () {
-    console.log('ignored ' + rawreq);
+        p.then(function (result) {
+          responder.send(JSON.stringify({ error: null, data: result }));
+        }).catch(function (error) {
+          responder.send(JSON.stringify(error));
+        });
+      }
+    }).catch(function () {
+      console.log('ignored ' + rawreq);
+    });
   });
-});
+}
 
 process.on('SIGINT', function() {
-  responder.close();
+  if (responder) {
+    responder.close();
+  }
 });
+
+if (module.parent) {
+  // not in use yet, and not tested as a submodule
+  module.exports = {
+    start: start,
+    stop: function () {
+      if (responder) {
+        responder.close();
+      }
+    }
+  };
+} else {
+  start();
+}

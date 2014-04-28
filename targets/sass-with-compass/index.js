@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Note: this expects that `compass watch` is running against the ouput dir
+ * Note: this expects that `compass` is installed and runnable
  */
 
 var fs = require('fs');
