@@ -4,7 +4,7 @@ var fork = require('child_process').fork;
 var assert = require('assert');
 
 function run() {
-  var proc = fork('server', {
+  var proc = fork('lib/server', {
     env: process.env,
     cwd: process.cwd(),
     encoding: 'utf8',
@@ -30,7 +30,6 @@ function doneOnceStopped(proc, error, done) {
 }
 
 describe('zeromq', function () {
-
   it('should start server', function (done) {
     var server = run();
 
@@ -46,8 +45,24 @@ describe('zeromq', function () {
     });
 
     server.stderr.on('data', function (data) {
-      console.log(data);
       doneOnceStopped(server, 'Failed on starting server: ' + data, done);
+    });
+  });
+
+  it('should respond to messages', function (done) {
+    var server = run();
+
+    server.stdout.on('data', function (data) {
+      console.log('data: ' + data);
+      // doneOnceStopped(server, null, done);
+
+      if (data.indexOf('Ready on ') !== -1) {
+        // send zeromq a message
+      }
+    });
+
+    server.stderr.on('data', function (data) {
+      doneOnceStopped(server, 'Failed to respond: ' + data, done);
     });
   });
 });

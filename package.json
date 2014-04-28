@@ -4,8 +4,8 @@
   "description": "The server side processors server",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "test": "node_modules/mocha/bin/_mocha --timeout 15000 --ui bdd test/**/*.test.js"
+    "start": "node lib/server.js",
+    "test": "node_modules/mocha/bin/_mocha --timeout 15000 test/**/*.test.js"
   },
   "author": "Remy Sharp",
   "license": "MIT",
