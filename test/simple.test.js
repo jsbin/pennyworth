@@ -1,23 +1,22 @@
 'use strict';
-
+/*global describe, it, after */
 var zmq = require('zmq');
-
-// socket to talk to server
-console.log('Connecting to processor server');
+var assert = require('assert');
 var requester = zmq.socket('req');
 
-var x = 0;
-requester.on('message', function (reply) {
-  console.log('Received reply', x, ': [', reply.toString(), ']');
-  requester.close();
-  process.exit(0);
-});
+describe('simple message tests', function () {
+  after(function () {
+    requester.close();
+  });
 
-requester.connect('tcp://localhost:5555');
+  it('should process markdown', function (done) {
+    requester.connect('tcp://localhost:5555');
+    requester.on('message', function (reply) {
+      var data = JSON.parse(reply);
+      assert(data.result.indexOf('<h1>Heading 1</h1>') !== -1, data.data);
+      done();
+    });
 
-console.log('Sending request…');
-requester.send(JSON.stringify({ language: 'markdown', source: '# Heading 1\n\nThis *is* a processor.' }));
-
-process.on('SIGINT', function() {
-  requester.close();
+    requester.send(JSON.stringify({ language: 'markdown', source: '# Heading 1\n\nThis *is* a processor.' }));
+  });
 });

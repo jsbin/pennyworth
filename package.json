@@ -2,7 +2,7 @@
   "name": "jsbin-processors",
   "version": "0.0.1",
   "description": "The server side processors server",
-  "main": "server.js",
+  "main": "lib/server.js",
   "scripts": {
     "start": "node lib/server.js",
     "test": "node_modules/mocha/bin/_mocha --timeout 15000 test/**/*.test.js"
