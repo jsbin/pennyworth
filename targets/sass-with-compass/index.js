@@ -10,44 +10,65 @@ var spawn = require('child_process').spawn;
 
 var output = path.join(__dirname, 'output');
 
-fs.mkdir(output, function () {});
+fs.mkdir(output, function (error) {
+  if (!error) {
+    spawn('compass', ['init'], {
+      cwd: output
+    });
+  }
+});
 
 module.exports = function (resolve, reject, data) {
   // FIXME ensure the data.url and revision are legit
   var targetFile = path.join(output, 'stylesheets', data.url + '.' + data.revision + '.css');
-  var sourceFile = path.join(output, 'sass', data.url + '.' + data.revision + '.scss');
-  console.log('looking for ' + targetFile);
+  var sourceFile = path.join('sass', data.url + '.' + data.revision + '.scss');
 
-  fs.mkdir(path.join(output, 'sass', data.url), function () {
-    fs.writeFile(sourceFile, data.source, function (error, result) {
-      console.log('file written', error, result);
-      console.log('compass', ['compile', sourceFile]);
-      var compass = spawn('compass', ['compile', sourceFile], {
-        cwd: output
-      });
+  fs.writeFile(path.join(output, sourceFile), data.source, function () {
+    var args = ['compile', sourceFile, '--no-line-comments', '--boring'];
+    console.log('compass', args);
 
-      compass.stdout.on('data', function (data) {
-        console.log('stdout: ' + data);
-      });
+    var compass = spawn('compass', args, {
+      cwd: output
+    });
 
-      compass.stderr.on('data', function (data) {
-        console.log('stderr: ' + data);
-        reject(data.toString());
-      });
+    compass.stderr.setEncoding('utf8');
+    compass.stdout.setEncoding('utf8');
 
-      compass.on('close', function (code) {
-        console.log('child process exited with code ' + code);
+    var result = '';
+    var error = '';
 
-        // if okay, then try to read the target
-        fs.readFile(targetFile, 'utf8', function (error, data) {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(data);
-          }
+    compass.stdout.on('data', function (data) {
+      result += data;
+    });
+
+    compass.stderr.on('data', function (data) {
+      error += data;
+    });
+
+    compass.on('close', function () {
+      if (error) {
+        return reject(error);
+      }
+
+      // this is because syntax errors are put on stdout...
+      if (result.indexOf('error ' + sourceFile) !== -1) {
+        var errors = [];
+        result.trim().replace(/\((Line.*?\))/g, function (a, m) {
+          errors.push(m);
         });
+        return reject(errors);
+      }
+
+      // if okay, then try to read the target
+      fs.readFile(targetFile, 'utf8', function (error, data) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(data);
+        }
       });
     });
-  });
 
+    //*/
+  });
 };

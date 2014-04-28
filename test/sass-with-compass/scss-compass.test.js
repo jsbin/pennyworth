@@ -9,7 +9,7 @@ var requester = zmq.socket('req');
 
 var x = 0;
 requester.on('message', function (reply) {
-  console.log('Received reply', x, ': [', reply.toString(), ']');
+  console.log(JSON.parse(reply));
   requester.close();
   process.exit(0);
 });
@@ -18,6 +18,7 @@ requester.connect('tcp://localhost:5555');
 
 console.log('Sending request...');
 fs.readFile('./sample.scss', 'utf8', function (error, source) {
+  // console.log('sending', source);
   requester.send(JSON.stringify({ language: 'sass-with-compass', source: source, url: 'abc', revision: 12 }));
 });
 

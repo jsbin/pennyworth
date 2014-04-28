@@ -16,12 +16,14 @@ fs.readdir(targets, function (error, files) {
   console.log('Pre-processors found: ' + files.length);
 
   files.forEach(function (file) {
-    try {
-      require(path.join(targets, file));
-      available.push(path.basename(file));
-    } catch (error) {
-      console.error('Problem with "' + file + '" module');
-      console.error(error);
+    if (file.indexOf('.') !== 0) {
+      try {
+        require(path.join(targets, file));
+        available.push(path.basename(file));
+      } catch (error) {
+        console.error('Problem with "' + file + '" module');
+        console.error(error);
+      }
     }
   });
 });
@@ -41,12 +43,17 @@ module.exports = {
   has: has
 };
 
+function send(data) {
+  process.send(JSON.stringify(data));
+}
+
 if (!module.parent) {
+
   process.on('message', function (event) {
     run(event).then(function (output) {
-      process.send(output);
+      send({ result: output, error: null });
     }).catch(function (error) {
-      console.error(error);
+      send({ error: error });
     }).then(function () {
       process.exit(0);
     });

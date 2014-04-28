@@ -46,9 +46,7 @@ responder.on('message', function (rawreq) {
           reject({ error: 'timeout', data: null });
         }, 10000);
 
-        child.on('stderr', function (data) {
-          console.error(req.language + ' processor errors');
-          console.error(data);
+        child.on('error', function (data) {
           reject({ error: 'errors', data: data });
         });
 
@@ -58,7 +56,15 @@ responder.on('message', function (rawreq) {
 
         child.on('exit', function () {
           clearTimeout(timeout);
-          resolve(output);
+          json(output).then(function (result) {
+            if (result.error) {
+              reject(result);
+            } else {
+              resolve(result);
+            }
+          }).catch(function () {
+            console.error('corrupted result from ' + req.language);
+          });
         });
 
         child.send(req);
