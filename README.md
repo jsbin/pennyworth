@@ -1,6 +1,8 @@
-# JS Bin Processors
+# Pennyworth: JS Bin Processors
 
-This is the server to handle processors. Though most of JS Bin's processors are handled both on the client side and server side, *some* processors need to be server side only (like Sass), but also they need to be (effectively) "thread safe".
+Pennyworth is the compliment to Jobsworth, handling tasks for Dave the JS Bin bot, and generally running around like a headless chicken turning gobbledegook in to sensible code!
+
+This is the server (and sample client) to handle processors. Though most of JS Bin's processors are handled both on the client side and server side, *some* processors need to be server side only (like Sass), but also they need to be (effectively) "thread safe".
 
 This server will respond to zeromq messages with appropriate source types, and respond with the translated output.
 
