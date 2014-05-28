@@ -10,12 +10,12 @@
   "author": "Remy Sharp",
   "license": "MIT",
   "dependencies": {
-    "zmq": "^2.7.0",
     "rsvp": "~3.0.1",
     "markdown": "~0.5.0",
     "gaze": "~0.6.4",
     "express": "~4.1.1",
-    "body-parser": "~1.0.2"
+    "body-parser": "~1.0.2",
+    "axon": "~2.0.0"
   },
   "devDependencies": {
     "mocha": "~1.18.2"
