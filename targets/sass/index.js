@@ -3,7 +3,7 @@
 var spawn = require('child_process').spawn;
 
 module.exports = function (resolve, reject, data) {
-  var args = ['--stdin', '--quiet', '--scss'];
+  var args = ['--stdin', '--quiet'];
 
   var sass = spawn('sass', args);
 
