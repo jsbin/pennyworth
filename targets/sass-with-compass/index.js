@@ -45,6 +45,10 @@ module.exports = function (resolve, reject, data) {
       error += data;
     });
 
+    compass.on('error', function (error) {
+      reject(error);
+    });
+
     compass.on('close', function () {
       if (error) {
         return reject(error);
