@@ -25,7 +25,7 @@ module.exports = function (resolve, reject, data) {
 
   fs.writeFile(path.join(output, sourceFile), data.source, function () {
     var args = ['compile', sourceFile, '--no-line-comments', '--boring'];
-    console.log('compass', args);
+    // console.log('compass', args);
 
     var compass = spawn('compass', args, {
       cwd: output
@@ -57,10 +57,14 @@ module.exports = function (resolve, reject, data) {
       // this is because syntax errors are put on stdout...
       if (result.indexOf('error ' + sourceFile) !== -1) {
         var errors = [];
-        result.trim().replace(/\((Line.*?\))/g, function (a, m) {
-          errors.push(m);
+        result.trim().replace(/\(Line\s+([\d]+):\s*(.*?)\)$/g, function (a, n, e) {
+          errors.push({
+            line: n,
+            msg: e
+          });
         });
-        return reject(errors);
+        // send the errors so we can show them
+        return resolve({ "errors": errors });
       }
 
       // if okay, then try to read the target
@@ -68,7 +72,7 @@ module.exports = function (resolve, reject, data) {
         if (error) {
           reject(error);
         } else {
-          resolve(data);
+          resolve({ "result": data });
         }
       });
     });
