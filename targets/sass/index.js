@@ -3,7 +3,13 @@
 var spawn = require('child_process').spawn;
 
 module.exports = function (resolve, reject, data) {
+  var par = data.par || module.exports.par;
+
   var args = ['--stdin', '--quiet'];
+
+  if (par) {
+    args = args.concat(par);
+  }
 
   var sass = spawn('sass', args);
 
@@ -25,13 +31,15 @@ module.exports = function (resolve, reject, data) {
 
   sass.on('close', function () {
     if (error) {
-      return reject(error);
+      return resolve({ "errors": error });
     }
 
-    resolve(result);
+    resolve({ "result": result });
   });
 
   // write to stdin and then close the stream to get the result
   sass.stdin.write(data.source);
   sass.stdin.end();
 };
+
+module.exports.par = null;
