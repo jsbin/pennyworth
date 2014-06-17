@@ -19,13 +19,12 @@ fs.mkdir(output, function (error) {
 });
 
 module.exports = function (resolve, reject, data) {
-  // FIXME ensure the data.url and revision are legit
-  var targetFile = path.join(output, 'stylesheets', data.url + '.' + data.revision + '.css');
-  var sourceFile = path.join('sass', data.url + '.' + data.revision + '.sass');
+  var ext = data.ext || module.exports.ext;
+  var targetFile = path.join(output, 'stylesheets', data.file + '.css');
+  var sourceFile = path.join('sass', data.file + ext);
 
   fs.writeFile(path.join(output, sourceFile), data.source, function () {
     var args = ['compile', sourceFile, '--no-line-comments', '--boring'];
-    // console.log('compass', args);
 
     var compass = spawn('compass', args, {
       cwd: output
@@ -80,3 +79,5 @@ module.exports = function (resolve, reject, data) {
     //*/
   });
 };
+
+module.exports.ext = '.sass';

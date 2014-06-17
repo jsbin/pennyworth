@@ -10,6 +10,8 @@ var spawn = require('child_process').spawn;
 
 var output = path.join(__dirname, 'output');
 
+var ext = '.scss';
+
 fs.mkdir(output, function (error) {
   if (!error) {
     spawn('compass', ['init'], {
@@ -18,65 +20,10 @@ fs.mkdir(output, function (error) {
   }
 });
 
+var sass = require('../sass-with-compass');
+
 module.exports = function (resolve, reject, data) {
-  // FIXME ensure the data.url and revision are legit
-  var targetFile = path.join(output, 'stylesheets', data.url + '.' + data.revision + '.css');
-  var sourceFile = path.join('sass', data.url + '.' + data.revision + '.scss');
+  data.ext = '.scss';
 
-  fs.writeFile(path.join(output, sourceFile), data.source, function () {
-    var args = ['compile', sourceFile, '--no-line-comments', '--boring'];
-    // console.log('compass', args);
-
-    var compass = spawn('compass', args, {
-      cwd: output
-    });
-
-    compass.stderr.setEncoding('utf8');
-    compass.stdout.setEncoding('utf8');
-
-    var result = '';
-    var error = '';
-
-    compass.stdout.on('data', function (data) {
-      result += data;
-    });
-
-    compass.stderr.on('data', function (data) {
-      error += data;
-    });
-
-    compass.on('error', function (error) {
-      reject(error);
-    });
-
-    compass.on('close', function () {
-      if (error) {
-        return reject(error);
-      }
-
-      // this is because syntax errors are put on stdout...
-      if (result.indexOf('error ' + sourceFile) !== -1) {
-        var errors = [];
-        result.trim().replace(/\(Line\s+([\d]+):\s*(.*?)\)$/g, function (a, n, e) {
-          errors.push({
-            line: n,
-            msg: e
-          });
-        });
-        // send the errors so we can show them
-        return resolve({ "errors": errors });
-      }
-
-      // if okay, then try to read the target
-      fs.readFile(targetFile, 'utf8', function (error, data) {
-        if (error) {
-          reject(error);
-        } else {
-          resolve({ "result": data });
-        }
-      });
-    });
-
-    //*/
-  });
+  sass(resolve, reject, data);
 };
