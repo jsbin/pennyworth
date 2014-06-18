@@ -1,27 +1,47 @@
+/* global describe, it, after, before */
 'use strict';
 
-var zmq = require('zmq');
 var fs = require('fs');
 
-// socket to talk to server
-console.log('Connecting to processor server');
-var requester = zmq.socket('req');
+var axon = require('axon');
+var requester = axon.socket('req');
 
-var x = 0;
-requester.on('message', function (reply) {
-  console.log(JSON.parse(reply));
-  requester.close();
-  process.exit(0);
-});
+describe('SCSS with Compass', function () {
 
-requester.connect('tcp://localhost:5555');
+  before(function () {
+    console.log('before');
+    requester.connect('tcp://localhost:5555');
+  });
 
-console.log('Sending request...');
-fs.readFile('./sample.scss', 'utf8', function (error, source) {
-  // console.log('sending', source);
-  requester.send(JSON.stringify({ language: 'sass-with-compass', source: source, url: 'abc', revision: 12 }));
-});
+  it('Should process valid SCSS without errors', function (done) {
+    fs.readFile(__dirname + '/sample.scss', function (error, file) {
+      console.log('read file');
+      requester.send({
+        language: 'scss-with-compass',
+        source: file
+      }, function (res) {
+        console.log(res); 
+        done();
+      });
+    });
+  });
 
-process.on('SIGINT', function() {
-  requester.close();
+  it('Should process invalid SCSS and give back an error', function (done) {
+    fs.readFile(__dirname + '/broken.scss', function (error, file) {
+      console.log('read file');
+      requester.send({
+        language: 'scss-with-compass',
+        source: file
+      }, function (res) {
+        console.log(res); 
+        done();
+      });
+    });
+  });
+
+  after(function () {
+    console.log('after');
+    requester.close();
+  });
+
 });
