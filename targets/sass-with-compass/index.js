@@ -35,6 +35,7 @@ fs.mkdir(output, function (error) {
 
 module.exports = function (resolve, reject, data) {
   var ext = data.ext || module.exports.ext;
+  var output = data.output || module.exports.output;
   var targetFile = path.join(output, 'stylesheets', data.file + '.css');
   var sourceFile = path.join('sass', data.file + ext);
 
@@ -96,3 +97,4 @@ module.exports = function (resolve, reject, data) {
 };
 
 module.exports.ext = '.sass';
+module.exports.output = output;
