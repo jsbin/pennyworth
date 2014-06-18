@@ -10,13 +10,26 @@ var spawn = require('child_process').spawn;
 
 var output = path.join(__dirname, 'output');
 
-var ext = '.scss';
-
+// make folder and create compass project
 fs.mkdir(output, function (error) {
   if (!error) {
-    spawn('compass', ['init'], {
+    spawn('compass', ['create'], {
       cwd: output
     });
+  }
+  else {
+    // check for project files
+    var projFiles = ['config.rb', 'sass', 'stylesheets'];
+    for (var i = 0; i < projFiles.length; i++) {
+      (function(name) {
+        var file = path.join(output, name);
+        fs.exists(file, function(exists) {
+          if (!exists) {
+            console.log('Error: ' + file + ' not created');
+          }
+        });
+      })(projFiles[i]);
+    }
   }
 });
 
