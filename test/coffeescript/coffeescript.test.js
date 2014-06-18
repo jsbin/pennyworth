@@ -28,7 +28,6 @@ describe('Coffeescript', function () {
 
   it('Should process invalid CoffeeScript and give back an error', function (done) {
     fs.readFile(__dirname + '/broken.coffee', function (error, file) {
-      console.log('read file');
       requester.send({
         language: 'coffeescript',
         source: file.toString()
