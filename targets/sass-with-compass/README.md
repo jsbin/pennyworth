@@ -15,3 +15,15 @@ This is not necessary as the script runs it if it doesn't find the output folder
   compass create output
   # for sass
   compass create --syntax sass output
+
+## Install "addons"
+
+### Blueprint
+
+First please read this note http://compass-style.org/blog/2012/05/20/removing-blueprint/
+
+  # install
+  sudo gem install --no-user-install --no-document compass-blueprint
+
+Add `require 'compass-blueprint'` to config.rb (at the end it's fine)
+
