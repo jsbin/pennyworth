@@ -1,5 +1,6 @@
-How to install SASS and Compass support
+# SASS and Compass support
 
+## How to install
   # update system gem
   sudo gem update --system
   # sass 3.3 or newer
