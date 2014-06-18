@@ -20,7 +20,6 @@ describe('Jade', function () {
         language: 'jade',
         source: file.toString()
       }, function (res) {
-        console.log(res);
         (res.error === null).should.be.true;
         done();
       });
@@ -33,7 +32,6 @@ describe('Jade', function () {
         language: 'jade',
         source: file.toString()
       }, function (res) {
-        console.log(res);
         res.error.should.exist;
         done();
       });
