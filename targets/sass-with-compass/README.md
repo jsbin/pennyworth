@@ -27,3 +27,22 @@ First please read this note http://compass-style.org/blog/2012/05/20/removing-bl
 
 Add `require 'compass-blueprint'` to config.rb (at the end it's fine)
 
+
+### (Bourbon)[http://bourbon.io/]
+
+  # install
+  sudo gem install --no-user-install --no-document bourbon
+  # create and install the folder under pennyworth
+  mkdir sass-frameworks
+  cd sass-frameworks
+  bourbon install
+
+Create symbolic link to the folder for every target
+  cd output/sass
+  ln -s ../../../../sass-frameworks/bourbon ./bourbon
+
+To use, import the mixins
+  @import 'bourbon/bourbon';
+
+To update
+  sudo bourbon update
