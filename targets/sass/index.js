@@ -21,7 +21,7 @@ fs.mkdir(output, function (error) {
     var projFiles = ['config.rb', 'sass', 'stylesheets'];
     projFiles.forEach(function (name) {
       var file = path.join(output, name);
-      fs.exists(file, function(exists) {
+      fs.exists(file, function (exists) {
         if (!exists) {
           console.log('Error: ' + file + ' not created');
         }
@@ -70,7 +70,7 @@ module.exports = function (resolve, reject, data) {
       if (result.indexOf('error ' + sourceFile) !== -1) {
         var errors = [];
         var resultArr = result.split('\n');
-        resultArr.forEach(function(line) {
+        resultArr.forEach(function (line) {
           line.trim().replace(/\(Line\s+([\d]+):\s*(.*?)(\)|\.)$/g, function (a, n, e) {
             errors.push({
               line: n,

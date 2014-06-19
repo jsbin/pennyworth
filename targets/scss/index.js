@@ -21,7 +21,7 @@ fs.mkdir(output, function (error) {
     var projFiles = ['config.rb', 'sass', 'stylesheets'];
     projFiles.forEach(function (name) {
       var file = path.join(output, name);
-      fs.exists(file, function(exists) {
+      fs.exists(file, function (exists) {
         if (!exists) {
           console.log('Error: ' + file + ' not created');
         }
