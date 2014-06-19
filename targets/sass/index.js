@@ -68,15 +68,18 @@ module.exports = function (resolve, reject, data) {
 
       // this is because syntax errors are put on stdout...
       if (result.indexOf('error ' + sourceFile) !== -1) {
-        // var errors = [];
-        // result.trim().replace(/\(Line\s+([\d]+):\s*(.*?)\)$/g, function (a, n, e) {
-        //   errors.push({
-        //     line: n,
-        //     msg: e
-        //   });
-        // });
+        var errors = [];
+        var resultArr = result.split('\n');
+        resultArr.forEach(function(line) {
+          line.trim().replace(/\(Line\s+([\d]+):\s*(.*?)(\)|\.)$/g, function (a, n, e) {
+            errors.push({
+              line: n,
+              msg: e
+            });
+          });
+        });
         // send the errors so we can show them
-        return resolve({ "errors": result });
+        return resolve({ "errors": errors });
       }
 
       // if okay, then try to read the target
