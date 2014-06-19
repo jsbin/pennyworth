@@ -21,6 +21,7 @@ describe('Less', function () {
         source: file.toString()
       }, function (res) {
         (res.error === null).should.be.true;
+        res.result.should.exist;
         done();
       });
     });
