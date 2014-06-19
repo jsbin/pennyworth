@@ -44,7 +44,7 @@ Install
 Create symbolic link to the bourbon folder for every target output
 
     cd targets/target_name/output/sass
-    ln -s ../../../../sass-frameworks/bourbon ./bourbon
+    ln -s /pennyworth/vendor/sass-frameworks/bourbon ./bourbon
 
 To use, import the mixins
 
