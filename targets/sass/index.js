@@ -16,20 +16,17 @@ fs.mkdir(output, function (error) {
     spawn('compass', ['create', '--syntax', 'sass'], {
       cwd: output
     });
-  }
-  else {
+  } else {
     // check for project files
     var projFiles = ['config.rb', 'sass', 'stylesheets'];
-    for (var i = 0; i < projFiles.length; i++) {
-      (function(name) {
-        var file = path.join(output, name);
-        fs.exists(file, function(exists) {
-          if (!exists) {
-            console.log('Error: ' + file + ' not created');
-          }
-        });
-      })(projFiles[i]);
-    }
+    projFiles.forEach(function (name) {
+      var file = path.join(output, name);
+      fs.exists(file, function(exists) {
+        if (!exists) {
+          console.log('Error: ' + file + ' not created');
+        }
+      });
+    });
   }
 });
 
