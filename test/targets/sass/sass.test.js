@@ -20,7 +20,7 @@ describe('Sass with Compass', function () {
         language: 'sass',
         source: file.toString(),
         url: '_sample',
-        revision: '_',
+        revision: '_'
       }, function (res) {
         (res.error === null).should.be.true;
         res.result.result.should.exist;
@@ -37,7 +37,7 @@ describe('Sass with Compass', function () {
         language: 'sass',
         source: file.toString(),
         url: '_broken',
-        revision: '_',
+        revision: '_'
       }, function (res) {
         // even in the error case we should get a res.error === null because the
         // sass output error is sent in the result.errors
