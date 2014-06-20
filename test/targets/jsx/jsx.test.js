@@ -8,9 +8,12 @@ var should = require('should');
 var axon = require('axon');
 var requester = axon.socket('req');
 
+var server = require('../../../lib/server');
+
 describe('JSX', function () {
 
   before(function () {
+    server.start();
     requester.connect('tcp://localhost:5555');
   });
 
@@ -41,6 +44,7 @@ describe('JSX', function () {
 
   after(function () {
     requester.close();
+    server.stop();
   });
 
 });
