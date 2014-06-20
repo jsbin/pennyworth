@@ -17,7 +17,7 @@ describe('Coffeescript', function () {
     server.start();
     console.log('after server.start()');
     requester.connect('tcp://0.0.0.0:5555');
-    console.log('after connect(\'tcp://0.0.0.0:555\')');
+    console.log('after connect(\'tcp://0.0.0.0:5555\')');
   });
 
   it('Should process valid CoffeeScript and pass back the compiled source', function (done) {
