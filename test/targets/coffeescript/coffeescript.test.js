@@ -13,8 +13,11 @@ var server = require('../../../lib/server');
 describe('Coffeescript', function () {
 
   before(function () {
+    console.log('before');
     server.start();
+    console.log('after server.start()');
     requester.connect('tcp://localhost:5555');
+    console.log('after connect(\'tcp://localhost:555\')');
   });
 
   it('Should process valid CoffeeScript and pass back the compiled source', function (done) {
