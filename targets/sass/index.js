@@ -79,7 +79,7 @@ module.exports = function (resolve, reject, data) {
           });
         });
         // send the errors so we can show them
-        return resolve({ "errors": errors });
+        return resolve({ 'errors': errors });
       }
 
       // if okay, then try to read the target
@@ -87,7 +87,7 @@ module.exports = function (resolve, reject, data) {
         if (error) {
           reject(error);
         } else {
-          resolve({ "result": data });
+          resolve({ 'result': data });
         }
       });
     });
