@@ -8,9 +8,12 @@ var should = require('should');
 var axon = require('axon');
 var requester = axon.socket('req');
 
+var server = require('../../../lib/server');
+
 describe('Sass with Compass', function () {
 
   before(function () {
+    server.start();
     requester.connect('tcp://localhost:5555');
   });
 
@@ -52,6 +55,7 @@ describe('Sass with Compass', function () {
 
   after(function () {
     requester.close();
+    server.stop();
   });
 
 });

@@ -8,6 +8,8 @@ var should = require('should');
 var axon = require('axon');
 var requester = axon.socket('req');
 
+var server = require('../../../lib/server');
+
 var language = 'scss';
 var ext = '.' + language;
 var sample = 'sample';
@@ -18,6 +20,7 @@ var output = '/../../../targets/' + language + '/output/';
 describe('SCSS with Compass', function () {
 
   before(function () {
+    server.start();
     requester.connect('tcp://localhost:5555');
   });
 
@@ -102,6 +105,7 @@ describe('SCSS with Compass', function () {
 
   after(function () {
     requester.close();
+    server.stop();
   });
 
 });

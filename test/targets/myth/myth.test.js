@@ -2,41 +2,40 @@
 'use strict';
 
 var fs = require('fs');
-
-var should = require('should');
+var assert = require('assert');
 
 var axon = require('axon');
 var requester = axon.socket('req');
 
 var server = require('../../../lib/server');
 
-describe('Jade', function () {
+describe('myth', function () {
 
   before(function () {
     server.start();
     requester.connect('tcp://localhost:5555');
   });
 
-  it('Should process valid Jade and pass back the compiled source', function (done) {
-    fs.readFile(__dirname + '/sample.jade', function (error, file) {
+  it('Should process unprefixed CSS and pass back the compiled source', function (done) {
+    fs.readFile(__dirname + '/sample.css', function (error, file) {
       requester.send({
-        language: 'jade',
+        language: 'myth',
         source: file.toString()
       }, function (res) {
-        (res.error === null).should.be.true;
-        res.result.should.exist;
+        assert(res.error === null, 'error is null: ' + res.error);
+        assert(!!res.result, 'result: ' + res.result);
         done();
       });
     });
   });
 
-  it('Should process invalid Jade and give back an error', function (done) {
-    fs.readFile(__dirname + '/broken.jade', function (error, file) {
+  it('Should process invalid CSS and give back an error', function (done) {
+    fs.readFile(__dirname + '/broken.css', function (error, file) {
       requester.send({
-        language: 'jade',
+        language: 'myth',
         source: file.toString()
       }, function (res) {
-        res.error.should.exist;
+        assert(!!res.error, 'has error: ' + res.error);
         done();
       });
     });
