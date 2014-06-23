@@ -53,4 +53,4 @@ To use the Gemfile you should first install bundler with `gem install bundler`, 
 
 When adding a dependancy, just stick `gem "depname"` at the bottom of the Gemfile, run `bundle install` and add both `Gemfile` and `Gemfile.lock` to the repo.
 
-You dont have to install purely via gems, you can install from git as well, and use aliases for local copies, which is all covered on the (bundler website)[http://bundler.io/v1.6/gemfile.html].
+You dont have to install purely via gems, you can install from git as well, and use aliases for local copies, which is all covered on the [bundler website](http://bundler.io/v1.6/gemfile.html).
