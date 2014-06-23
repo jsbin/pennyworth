@@ -8,10 +8,13 @@ var should = require('should');
 var axon = require('axon');
 var requester = axon.socket('req');
 
+var server = require('../../../lib/server');
+
 describe('Coffeescript', function () {
 
   before(function () {
-    requester.connect('tcp://localhost:5555');
+    server.start();
+    requester.connect('tcp://0.0.0.0:5555');
   });
 
   it('Should process valid CoffeeScript and pass back the compiled source', function (done) {
@@ -41,6 +44,7 @@ describe('Coffeescript', function () {
 
   after(function () {
     requester.close();
+    server.stop();
   });
 
 });

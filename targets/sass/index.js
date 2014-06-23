@@ -13,9 +13,14 @@ var output = path.join(__dirname, 'output');
 // make folder and create compass project
 fs.mkdir(output, function (error) {
   if (!error) {
-    spawn('compass', ['create', '--syntax', 'sass'], {
-      cwd: output
-    });
+    // FIXME we should actuall install compass to the travis box pre-test
+    try {
+      spawn('compass', ['create', '--syntax', 'sass'], {
+        cwd: output
+      });
+    } catch (e) {
+      console.log(e);
+    }
   } else {
     // check for project files
     var projFiles = ['config.rb', 'sass', 'stylesheets'];
@@ -79,7 +84,7 @@ module.exports = function (resolve, reject, data) {
           });
         });
         // send the errors so we can show them
-        return resolve({ "errors": errors });
+        return resolve({ 'errors': errors });
       }
 
       // if okay, then try to read the target
@@ -87,7 +92,7 @@ module.exports = function (resolve, reject, data) {
         if (error) {
           reject(error);
         } else {
-          resolve({ "result": data });
+          resolve({ 'result': data });
         }
       });
     });

@@ -13,9 +13,13 @@ var output = path.join(__dirname, 'output');
 // make folder and create compass project
 fs.mkdir(output, function (error) {
   if (!error) {
-    spawn('compass', ['create'], {
-      cwd: output
-    });
+    try {
+      spawn('compass', ['create'], {
+        cwd: output
+      });
+    } catch (e) {
+      console.log(e);
+    }
   } else {
     // check for project files
     var projFiles = ['config.rb', 'sass', 'stylesheets'];
