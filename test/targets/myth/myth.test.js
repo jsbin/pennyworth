@@ -7,9 +7,12 @@ var assert = require('assert');
 var axon = require('axon');
 var requester = axon.socket('req');
 
+var server = require('../../../lib/server');
+
 describe('myth', function () {
 
   before(function () {
+    server.start();
     requester.connect('tcp://localhost:5555');
   });
 
@@ -40,6 +43,7 @@ describe('myth', function () {
 
   after(function () {
     requester.close();
+    server.stop();
   });
 
 });
