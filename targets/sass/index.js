@@ -79,12 +79,16 @@ module.exports = function (resolve, reject, data) {
           line.trim().replace(/\(Line\s+([\d]+):\s*(.*?)(\)|\.)$/g, function (a, n, e) {
             errors.push({
               line: n,
+              ch: null,
               msg: e
             });
           });
         });
         // send the errors so we can show them
-        return resolve({ 'errors': errors });
+        return resolve({
+          errors: errors,
+          result: null
+        });
       }
 
       // if okay, then try to read the target
@@ -92,7 +96,10 @@ module.exports = function (resolve, reject, data) {
         if (error) {
           reject(error);
         } else {
-          resolve({ 'result': data });
+          resolve({
+            errors: null,
+            result: data
+          });
         }
       });
     });

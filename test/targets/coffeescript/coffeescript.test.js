@@ -24,7 +24,8 @@ describe('Coffeescript', function () {
         source: file.toString()
       }, function (res) {
         (res.error === null).should.be.true;
-        res.result.should.exist;
+        (res.result.errors === null).should.be.true;
+        res.result.result.should.exist;
         done();
       });
     });
@@ -36,7 +37,9 @@ describe('Coffeescript', function () {
         language: 'coffeescript',
         source: file.toString()
       }, function (res) {
-        res.error.should.exist;
+        (res.error === null).should.be.true;
+        (res.result.result === null).should.be.true;
+        res.result.errors.should.exist;
         done();
       });
     });

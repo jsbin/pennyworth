@@ -26,6 +26,7 @@ describe('Sass with Compass', function () {
         revision: '_'
       }, function (res) {
         (res.error === null).should.be.true;
+        (res.result.errors === null).should.be.true;
         res.result.result.should.exist;
         fs.unlink(__dirname + '/../../../targets/sass/output/sass/_sample._.sass');
         fs.unlink(__dirname + '/../../../targets/sass/output/stylesheets/_sample._.css');
@@ -45,6 +46,7 @@ describe('Sass with Compass', function () {
         // even in the error case we should get a res.error === null because the
         // sass output error is sent in the result.errors
         (res.error === null).should.be.true;
+        (res.result.result === null).should.be.true;
         res.result.errors.should.exist;
         fs.unlink(__dirname + '/../../../targets/sass/output/sass/_broken._.sass');
         fs.unlink(__dirname + '/../../../targets/sass/output/stylesheets/_broken._.css');

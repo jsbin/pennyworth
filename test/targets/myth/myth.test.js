@@ -23,7 +23,7 @@ describe('myth', function () {
         source: file.toString()
       }, function (res) {
         assert(res.error === null, 'error is null: ' + res.error);
-        assert(!!res.result, 'result: ' + res.result);
+        assert(!!res.result.result, 'result: ' + res.result.result);
         done();
       });
     });
@@ -35,7 +35,8 @@ describe('myth', function () {
         language: 'myth',
         source: file.toString()
       }, function (res) {
-        assert(!!res.error, 'has error: ' + res.error);
+        assert(res.error === null, 'error is null: ' + res.error);
+        assert(!!res.result.errors, 'result: ' + res.result.errors);
         done();
       });
     });

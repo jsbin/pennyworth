@@ -3,8 +3,20 @@ var myth = require('myth');
 
 module.exports = function convertMyth(resolve, reject, data) {
   try {
-    resolve(myth(data.source));
+    var res = myth(data.source);
+    resolve({
+      errors: null,
+      result: res
+    });
   } catch (e) {
-    reject(e);
+    var errors = {
+      line: e.line,
+      ch: e.column,
+      msg: e.message
+    };
+    resolve({
+      errors: [errors],
+      result: null
+    });
   }
 };

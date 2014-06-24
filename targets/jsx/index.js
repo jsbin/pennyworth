@@ -4,8 +4,20 @@ var jsx = require('./JSXTransformer');
 
 module.exports = function (resolve, reject, data) {
   try {
-    resolve(jsx.transform(data.source).code);
+    var res = jsx.transform(data.source).code;
+    resolve({
+      errors: null,
+      result: res
+    });
   } catch (e) {
-    reject(e);
+    var errors = {
+      line: e.lineNumber,
+      ch: e.column,
+      msg: e.description
+    };
+    resolve({
+      errors: [errors],
+      result: null
+    });
   }
 };

@@ -1,11 +1,26 @@
+'use strict';
 var stylus = require('stylus');
 
 var convertToStylus = function (resolve, reject, data) {
   stylus.render(data.source, function (error, css) {
     if (error) {
-      reject(error);
+      var line = error.message.match(/stylus:(\d+)/);
+      var msg = error.message.match(/\n\n(.+)\n$/);
+      var errors = {
+        line: line[1],
+        ch: null,
+        msg: msg[1]
+      };
+      resolve({
+        errors: [errors],
+        result: null
+      });
     }
-    resolve(css);
+    var res = css;
+    resolve({
+      errors: null,
+      result: res
+    });
   });
 };
 
