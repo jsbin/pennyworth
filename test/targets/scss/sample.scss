@@ -55,3 +55,84 @@ html {
     transform: rotateX(90deg) translateZ($r*cos($a));
   }
 }
+
+
+//=== Sass 3.3 functionalities
+// Maps
+$themes: (
+  mist: (
+    header: #DCFAC0,
+    text:   #00968B,
+    border: #85C79C
+  ),
+  spring: (
+    header: #F4FAC7,
+    text:   #C2454E,
+    border: #FFB158
+  ),
+);
+
+@mixin themed-header($theme-name) {
+  body {
+    color: map-get(map-get($themes, $theme-name), text);
+  }
+  
+  h1 {
+    color: map-get(map-get($themes, $theme-name), header);
+    border-bottom: 1px solid map-get(map-get($themes, $theme-name), border);
+  }
+}
+
+@include themed-header(spring);
+
+@each $header, $size in (h1: 2em, h2: 1.5em, h3: 1.2em) {
+  #{$header} {
+    font-size: $size;
+  }
+}
+
+// Suffix
+.test {
+  color: red;
+  
+  &--title {
+    color: blue;
+  }
+  &__sub {
+    color: green;
+  }
+}
+
+// @at-root
+@media print {
+  .page {
+    width: 8in;
+    @at-root (without: media) {
+      color: red;
+    }
+  }
+}
+
+
+//=== Compass
+@import "compass/reset.scss";
+@import "compass/layout.scss";
+ 
+@include sticky-footer(72px, "#layout", "#layout_footer", "#footer");
+ 
+#header {
+  background: #999999;
+  height: 72px;
+}
+ 
+#footer {
+  background: #cccccc;
+}
+ 
+.example {
+  height: 500px;
+  border: 3px solid red;
+  p {
+    margin: 1em 0.5em;
+  }
+}
