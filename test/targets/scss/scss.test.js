@@ -103,6 +103,25 @@ describe('SCSS with Compass', function () {
   //   });
   // });
 
+  it('Should import Bourbon without errors', function (done) {
+    var fileName = sample + '_bourbon';
+    var check = 'result';
+    fs.readFile(__dirname + '/' + fileName + ext, function (error, file) {
+      requester.send({
+        language: language,
+        source: file.toString(),
+        url: '_' + fileName,
+        revision: '_'
+      }, function (res) {
+        (res.error === null).should.be.true;
+        res.result[check].should.exist;
+        fs.unlink(__dirname + output + 'sass/_' + fileName + '._' + ext);
+        fs.unlink(__dirname + output + 'stylesheets/_' + fileName + '._.css');
+        done();
+      });
+    });
+  });
+
   after(function () {
     requester.close();
     server.stop();
