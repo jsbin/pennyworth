@@ -20,7 +20,8 @@
     "coffee-script": "~1.7.1",
     "less": "~1.7.1",
     "stylus": "~0.46.3",
-    "myth": "~1.0.4"
+    "myth": "~1.0.4",
+    "ps-tree": "~0.0.3"
   },
   "devDependencies": {
     "mocha": "~1.18.2",
