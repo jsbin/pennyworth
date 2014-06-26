@@ -1,4 +1,4 @@
-/* global describe, it, after, before */
+/* global describe, it, after, before, __dirname, require */
 'use strict';
 
 var fs = require('fs');
@@ -25,9 +25,12 @@ describe('SCSS with Compass', function () {
     requester.connect('tcp://localhost:5555');
   });
 
+
+  // Plain
   it('Should process valid SCSS without errors', function (done) {
     var fileName = sample;
     var check = 'result';
+    var ncheck = 'errors';
     fs.readFile(__dirname + '/' + fileName + ext, function (error, file) {
       requester.send({
         language: language,
@@ -35,10 +38,11 @@ describe('SCSS with Compass', function () {
         url: '_' + fileName,
         revision: '_'
       }, function (res) {
-        (res.error === null).should.be.true;
-        res.result[check].should.exist;
         fs.unlink(__dirname + output + 'sass/_' + fileName + '._' + ext);
         fs.unlink(__dirname + output + 'stylesheets/_' + fileName + '._.css');
+        (res.error === null).should.be.true;
+        res.result[check].should.exist;
+        (res.result[ncheck] === null).should.be.true;
         done();
       });
     });
@@ -47,6 +51,7 @@ describe('SCSS with Compass', function () {
   it('Should process invalid SCSS and give back an error', function (done) {
     var fileName = broken;
     var check = 'errors';
+    var ncheck = 'result';
     fs.readFile(__dirname + '/' + fileName + ext, function (error, file) {
       requester.send({
         language: language,
@@ -54,20 +59,22 @@ describe('SCSS with Compass', function () {
         url: '_' + fileName,
         revision: '_'
       }, function (res) {
-        // even in the error case we should get a res.error === null because the
-        // scss output error is sent in the result.errors
-        (res.error === null).should.be.true;
-        res.result[check].should.exist;
         fs.unlink(__dirname + output + 'sass/_' + fileName + '._' + ext);
         fs.unlink(__dirname + output + 'stylesheets/_' + fileName + '._.css');
+        (res.error === null).should.be.true;
+        res.result[check].should.exist;
+        (res.result[ncheck] === null).should.be.true;
         done();
       });
     });
   });
 
+
+  // @import bin
   it('Should process valid @import of a bin without errors', function (done) {
     var fileName = sample + '_' + imp;
     var check = 'result';
+    var ncheck = 'errors';
     var p = new Promise(function (resolve, reject) {
       fs.readFile(__dirname + '/' + imp + ext, function (error, file) {
         requester.send({
@@ -76,12 +83,14 @@ describe('SCSS with Compass', function () {
           url: '_' + imp,
           revision: '1'
         }, function(res) {
-          // done();
           if (res.error === null && res.result.result !== null) {
             resolve();
           } else {
+            fs.unlink(__dirname + output + 'sass/_' + imp + '.1' + ext);
+            fs.unlink(__dirname + output + 'stylesheets/_' + imp + '.1.css');
             (res.error === null).should.be.true;
-            res.result[check].should.exist;
+            res.result[ncheck].should.exist;
+            (res.result[check] === null).should.be.true;
             done();
           }
         });
@@ -94,17 +103,46 @@ describe('SCSS with Compass', function () {
           url: '_' + fileName,
           revision: '_'
         }, function(res) {
+          fs.unlink(__dirname + output + 'sass/_' + fileName + '._' + ext);
+          fs.unlink(__dirname + output + 'stylesheets/_' + fileName + '._.css');
+          fs.unlink(__dirname + output + 'sass/_' + imp + '.1' + ext);
+          fs.unlink(__dirname + output + 'stylesheets/_' + imp + '.1.css');
           (res.error === null).should.be.true;
           res.result[check].should.exist;
+          (res.result[ncheck] === null).should.be.true;
           done();
         });
       });
     });
   });
 
+  it('Should process invalid @import of a bin and give back an error', function (done) {
+    var fileName = broken + '_' + imp;
+    var check = 'errors';
+    var ncheck = 'result';
+    fs.readFile(__dirname + '/' + fileName + ext, function (error, file) {
+      requester.send({
+        language: language,
+        source: file.toString(),
+        url: '_' + fileName,
+        revision: '_'
+      }, function(res) {
+        fs.unlink(__dirname + output + 'sass/_' + fileName + '._' + ext);
+        fs.unlink(__dirname + output + 'stylesheets/_' + fileName + '._.css');
+        (res.error === null).should.be.true;
+        res.result[check].should.exist;
+        (res.result[ncheck] === null).should.be.true;
+        done();
+      });
+    });
+  });
+
+
+  // Bourbon
   it('Should import Bourbon without errors', function (done) {
     var fileName = sample + '_bourbon';
     var check = 'result';
+    var ncheck = 'errors';
     fs.readFile(__dirname + '/' + fileName + ext, function (error, file) {
       requester.send({
         language: language,
@@ -112,14 +150,37 @@ describe('SCSS with Compass', function () {
         url: '_' + fileName,
         revision: '_'
       }, function (res) {
-        (res.error === null).should.be.true;
-        res.result[check].should.exist;
         fs.unlink(__dirname + output + 'sass/_' + fileName + '._' + ext);
         fs.unlink(__dirname + output + 'stylesheets/_' + fileName + '._.css');
+        (res.error === null).should.be.true;
+        res.result[check].should.exist;
+        (res.result[ncheck] === null).should.be.true;
         done();
       });
     });
   });
+
+  it('Should fail importing Bourbon and give back an error', function (done) {
+    var fileName = broken + '_bourbon';
+    var check = 'errors';
+    var ncheck = 'result';
+    fs.readFile(__dirname + '/' + fileName + ext, function (error, file) {
+      requester.send({
+        language: language,
+        source: file.toString(),
+        url: '_' + fileName,
+        revision: '_'
+      }, function (res) {
+        fs.unlink(__dirname + output + 'sass/_' + fileName + '._' + ext);
+        fs.unlink(__dirname + output + 'stylesheets/_' + fileName + '._.css');
+        (res.error === null).should.be.true;
+        res.result[check].should.exist;
+        (res.result[ncheck] === null).should.be.true;
+        done();
+      });
+    });
+  });
+
 
   after(function () {
     requester.close();
