@@ -1,7 +1,8 @@
-/* global describe, it, after, before */
+/* global describe, it, after, before, __dirname, require */
 'use strict';
 
 var fs = require('fs');
+var Promise = require('rsvp').Promise;
 
 var should = require('should');
 
@@ -10,6 +11,13 @@ var requester = axon.socket('req');
 
 var server = require('../../../lib/server');
 
+var language = 'sass';
+var ext = '.' + language;
+var sample = 'sample';
+var broken = 'broken';
+var imp = 'import';
+var output = '/../../../targets/' + language + '/output/';
+
 describe('Sass with Compass', function () {
 
   before(function () {
@@ -17,43 +25,162 @@ describe('Sass with Compass', function () {
     requester.connect('tcp://localhost:5555');
   });
 
+
+  // Plain
   it('Should process valid Sass without errors', function (done) {
-    fs.readFile(__dirname + '/sample.sass', function (error, file) {
+    var fileName = sample;
+    var check = 'result';
+    var ncheck = 'errors';
+    fs.readFile(__dirname + '/' + fileName + ext, function (error, file) {
       requester.send({
-        language: 'sass',
+        language: language,
         source: file.toString(),
-        url: '_sample',
+        url: '_' + fileName,
         revision: '_'
       }, function (res) {
+        fs.unlink(__dirname + output + 'sass/_' + fileName + '._' + ext);
+        fs.unlink(__dirname + output + 'stylesheets/_' + fileName + '._.css');
         (res.error === null).should.be.true;
-        (res.result.errors === null).should.be.true;
-        res.result.result.should.exist;
-        fs.unlink(__dirname + '/../../../targets/sass/output/sass/_sample._.sass');
-        fs.unlink(__dirname + '/../../../targets/sass/output/stylesheets/_sample._.css');
+        res.result[check].should.exist;
+        (res.result[ncheck] === null).should.be.true;
         done();
       });
     });
   });
 
   it('Should process invalid Sass and give back an error', function (done) {
-    fs.readFile(__dirname + '/broken.sass', function (error, file) {
+    var fileName = broken;
+    var check = 'errors';
+    var ncheck = 'result';
+    fs.readFile(__dirname + '/' + fileName + ext, function (error, file) {
       requester.send({
-        language: 'sass',
+        language: language,
         source: file.toString(),
-        url: '_broken',
+        url: '_' + fileName,
         revision: '_'
       }, function (res) {
-        // even in the error case we should get a res.error === null because the
-        // sass output error is sent in the result.errors
+        fs.unlink(__dirname + output + 'sass/_' + fileName + '._' + ext);
+        fs.unlink(__dirname + output + 'stylesheets/_' + fileName + '._.css');
         (res.error === null).should.be.true;
-        (res.result.result === null).should.be.true;
-        res.result.errors.should.exist;
-        fs.unlink(__dirname + '/../../../targets/sass/output/sass/_broken._.sass');
-        fs.unlink(__dirname + '/../../../targets/sass/output/stylesheets/_broken._.css');
+        res.result[check].should.exist;
+        (res.result[ncheck] === null).should.be.true;
         done();
       });
     });
   });
+
+
+  // @import bin
+  it('Should process valid @import of a bin without errors', function (done) {
+    var fileName = sample + '_' + imp;
+    var check = 'result';
+    var ncheck = 'errors';
+    var p = new Promise(function (resolve, reject) {
+      fs.readFile(__dirname + '/' + imp + ext, function (error, file) {
+        requester.send({
+          language: language,
+          source: file.toString(),
+          url: '_' + imp,
+          revision: '1'
+        }, function(res) {
+          if (res.error === null && res.result.result !== null) {
+            resolve();
+          } else {
+            fs.unlink(__dirname + output + 'sass/_' + imp + '.1' + ext);
+            fs.unlink(__dirname + output + 'stylesheets/_' + imp + '.1.css');
+            (res.error === null).should.be.true;
+            res.result[ncheck].should.exist;
+            (res.result[check] === null).should.be.true;
+            done();
+          }
+        });
+      });
+    }).then(function () {
+      fs.readFile(__dirname + '/' + fileName + ext, function (error, file) {
+        requester.send({
+          language: language,
+          source: file.toString(),
+          url: '_' + fileName,
+          revision: '_'
+        }, function(res) {
+          fs.unlink(__dirname + output + 'sass/_' + fileName + '._' + ext);
+          fs.unlink(__dirname + output + 'stylesheets/_' + fileName + '._.css');
+          fs.unlink(__dirname + output + 'sass/_' + imp + '.1' + ext);
+          fs.unlink(__dirname + output + 'stylesheets/_' + imp + '.1.css');
+          (res.error === null).should.be.true;
+          res.result[check].should.exist;
+          (res.result[ncheck] === null).should.be.true;
+          done();
+        });
+      });
+    });
+  });
+
+  it('Should process invalid @import of a bin and give back an error', function (done) {
+    var fileName = broken + '_' + imp;
+    var check = 'errors';
+    var ncheck = 'result';
+    fs.readFile(__dirname + '/' + fileName + ext, function (error, file) {
+      requester.send({
+        language: language,
+        source: file.toString(),
+        url: '_' + fileName,
+        revision: '_'
+      }, function(res) {
+        fs.unlink(__dirname + output + 'sass/_' + fileName + '._' + ext);
+        fs.unlink(__dirname + output + 'stylesheets/_' + fileName + '._.css');
+        (res.error === null).should.be.true;
+        res.result[check].should.exist;
+        (res.result[ncheck] === null).should.be.true;
+        done();
+      });
+    });
+  });
+
+
+  // Bourbon
+  it('Should import Bourbon without errors', function (done) {
+    var fileName = sample + '_bourbon';
+    var check = 'result';
+    var ncheck = 'errors';
+    fs.readFile(__dirname + '/' + fileName + ext, function (error, file) {
+      requester.send({
+        language: language,
+        source: file.toString(),
+        url: '_' + fileName,
+        revision: '_'
+      }, function (res) {
+        fs.unlink(__dirname + output + 'sass/_' + fileName + '._' + ext);
+        fs.unlink(__dirname + output + 'stylesheets/_' + fileName + '._.css');
+        (res.error === null).should.be.true;
+        res.result[check].should.exist;
+        (res.result[ncheck] === null).should.be.true;
+        done();
+      });
+    });
+  });
+
+  it('Should fail importing Bourbon and give back an error', function (done) {
+    var fileName = broken + '_bourbon';
+    var check = 'errors';
+    var ncheck = 'result';
+    fs.readFile(__dirname + '/' + fileName + ext, function (error, file) {
+      requester.send({
+        language: language,
+        source: file.toString(),
+        url: '_' + fileName,
+        revision: '_'
+      }, function (res) {
+        fs.unlink(__dirname + output + 'sass/_' + fileName + '._' + ext);
+        fs.unlink(__dirname + output + 'stylesheets/_' + fileName + '._.css');
+        (res.error === null).should.be.true;
+        res.result[check].should.exist;
+        (res.result[ncheck] === null).should.be.true;
+        done();
+      });
+    });
+  });
+
 
   after(function () {
     requester.close();
