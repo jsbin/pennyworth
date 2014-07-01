@@ -36,7 +36,7 @@ Install
 
     # install
     sudo gem install --no-user-install --no-document bourbon
-    # create and install the folder under pennyworth
+    # create and install the folder under pennyworth/vendor
     mkdir sass-frameworks
     cd sass-frameworks
     bourbon install
