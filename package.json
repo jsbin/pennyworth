@@ -21,7 +21,8 @@
     "less": "~1.7.1",
     "stylus": "~0.46.3",
     "myth": "~1.0.4",
-    "ps-tree": "~0.0.3"
+    "ps-tree": "~0.0.3",
+    "lynx": "0.0.11"
   },
   "devDependencies": {
     "mocha": "~1.18.2",
