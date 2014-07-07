@@ -4,10 +4,15 @@ var stylus = require('stylus');
 var convertToStylus = function (resolve, reject, data) {
   stylus.render(data.source, function (error, css) {
     if (error) {
-      var line = error.message.match(/stylus:(\d+)/);
+      // index starts at 1
+      var lineMatch = error.message.match(/stylus:(\d+)/);
+      var line = parseInt(lineMatch[1], 10) || 0;
       var msg = error.message.match(/\n\n(.+)\n$/);
+      if (line > 0) {
+        line = line - 1;
+      }
       var errors = {
-        line: line[1],
+        line: line,
         ch: null,
         msg: msg[1]
       };

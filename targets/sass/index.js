@@ -76,9 +76,14 @@ module.exports = function (resolve, reject, data) {
         var errors = [];
         var resultArr = result.split('\n');
         resultArr.forEach(function (line) {
+          // index starts at 1
           line.trim().replace(/\(Line\s+([\d]+):\s*(.*?)(\)|\.)$/g, function (a, n, e) {
+            var l = parseInt(n, 10) || 0;
+            if (l > 0) {
+              l = l - 1;
+            }
             errors.push({
-              line: n,
+              line: l,
               ch: null,
               msg: e
             });

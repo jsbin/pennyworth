@@ -9,9 +9,10 @@ var convertToCoffeeScript = function (resolve, reject, data) {
       result: res
     });
   } catch (e) {
+    // index starts at 0
     var errors = {
-      line: e.location.first_line,
-      ch: e.location.first_column,
+      line: parseInt(e.location.first_line, 10) || 0,
+      ch: parseInt(e.location.first_column, 10) || 0,
       msg: e.message
     };
     resolve({

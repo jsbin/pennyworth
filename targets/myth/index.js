@@ -9,9 +9,18 @@ module.exports = function convertMyth(resolve, reject, data) {
       result: res
     });
   } catch (e) {
+    // index starts at 1
+    var line = parseInt(e.line, 10) || 0;
+    var ch = parseInt(e.column, 10) || 0;
+    if (line > 0) {
+      line = line - 1;
+    }
+    if (ch > 0) {
+      ch = ch - 1;
+    }
     var errors = {
-      line: e.line,
-      ch: e.column,
+      line: line,
+      ch: ch,
       msg: e.message
     };
     resolve({
