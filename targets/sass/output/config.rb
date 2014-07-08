@@ -20,4 +20,6 @@ javascripts_dir = "javascripts"
 preferred_syntax = :sass
 
 require File.join(File.dirname(__FILE__), '../../../lib/', 'importer.rb')
+require File.join(File.dirname(__FILE__), '../../../lib/', 'importer_http.rb')
 Sass.load_paths << Sass::Importers::JSBin.new()
+Sass.load_paths << Sass::Importers::HTTP.new('http://jsbin.com/')
