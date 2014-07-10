@@ -4,6 +4,8 @@ require 'sass'
 require 'net/http'
 require 'time'
 
+$load_time = 5 # in seconds
+
 module Sass
   module Importers
     class HTTP < Base
@@ -61,8 +63,12 @@ module Sass
       end
 
       def exists? uri
-        Net::HTTP.start(uri.host, uri.port) do |http|
-          http.head(uri.request_uri).is_a? Net::HTTPOK
+        begin
+          Net::HTTP.start(uri.host, uri.port, :read_timeout => $load_time) do |http|
+            http.head(uri.request_uri).is_a? Net::HTTPOK
+          end
+        rescue Timeout::Error => e
+          return nil
         end
       end
 
