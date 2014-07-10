@@ -24,6 +24,8 @@ javascripts_dir = "javascripts"
 # and then run:
 # sass-convert -R --from scss --to sass sass scss && rm -rf sass && mv scss sass
 
+add_import_path "../../../vendor/sass-frameworks"
+
 require File.join(File.dirname(__FILE__), '../../../lib/', 'importer.rb')
 require File.join(File.dirname(__FILE__), '../../../lib/', 'importer_http.rb')
 Sass.load_paths << Sass::Importers::JSBin.new()

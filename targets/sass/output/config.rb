@@ -19,6 +19,8 @@ javascripts_dir = "javascripts"
 
 preferred_syntax = :sass
 
+add_import_path "../../../vendor/sass-frameworks"
+
 require File.join(File.dirname(__FILE__), '../../../lib/', 'importer.rb')
 require File.join(File.dirname(__FILE__), '../../../lib/', 'importer_http.rb')
 Sass.load_paths << Sass::Importers::JSBin.new()

@@ -15,9 +15,5 @@ cd vendor/sass-frameworks
 bourbon install
 cd ../../targets/sass/output
 compass init
-cd sass
-ln -s ../../../../vendor/sass-frameworks/bourbon ./bourbon
-cd ../../../scss/output
+cd ../../scss/output
 compass init
-cd sass
-ln -s ../../../../vendor/sass-frameworks/bourbon ./bourbon
