@@ -1,4 +1,4 @@
-$url = "http://jsbin-dev.com/"
+$url = "http://jsbin.com/"
 $timeout = 5 # in seconds
 
 require File.join(File.dirname(__FILE__), 'lib/', 'importer.rb')
