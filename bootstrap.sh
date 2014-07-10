@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
-# sudo apt-get install -y ruby
+sudo apt-get install -y ruby
 # sudo apt-get install -y ruby1.9.3-dev
+sudo apt-get install -y ruby1.9.1-dev
 # sudo apt-get install -y make
 
-gem install bundler
+sudo gem install bundler
 bundle install
 
 # gem update --system
