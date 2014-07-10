@@ -1,3 +1,6 @@
+require "../../../config.rb"
+add_import_path "../../../vendor/sass-frameworks"
+
 require 'compass/import-once/activate'
 # Require any additional compass plugins here.
 
@@ -18,10 +21,3 @@ javascripts_dir = "javascripts"
 # line_comments = false
 
 preferred_syntax = :sass
-
-add_import_path "../../../vendor/sass-frameworks"
-
-require File.join(File.dirname(__FILE__), '../../../lib/', 'importer.rb')
-require File.join(File.dirname(__FILE__), '../../../lib/', 'importer_http.rb')
-Sass.load_paths << Sass::Importers::JSBin.new()
-Sass.load_paths << Sass::Importers::HTTP.new('http://jsbin.com/')

@@ -4,13 +4,12 @@ require 'sass'
 require 'net/http'
 require 'time'
 
-$load_time = 5 # in seconds
-
 module Sass
   module Importers
     class HTTP < Base
-      def initialize root
+      def initialize root, timeout
         @root = URI.parse root
+        @timeout = timeout
 
         unless scheme_allowed? @root
           raise ArgumentError, "Absolute HTTP URIs only"
@@ -64,7 +63,7 @@ module Sass
 
       def exists? uri
         begin
-          Net::HTTP.start(uri.host, uri.port, :read_timeout => $load_time) do |http|
+          Net::HTTP.start(uri.host, uri.port, :read_timeout => @timeout) do |http|
             http.head(uri.request_uri).is_a? Net::HTTPOK
           end
         rescue Timeout::Error => e
