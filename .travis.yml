@@ -6,7 +6,6 @@ before_install:
   - gem install bundler
   - bundle install
   - cd vendor/sass-frameworks
-  - bourbon install
   - cd ../../targets/sass/output
   - compass init
   - cd ../../scss/output
