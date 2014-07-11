@@ -5,8 +5,3 @@ before_install:
   - rvm use 1.9.3
   - gem install bundler
   - bundle install
-  - cd vendor/sass-frameworks
-  - cd ../../targets/sass/output
-  - compass init
-  - cd ../../scss/output
-  - compass init
