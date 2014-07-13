@@ -32,25 +32,43 @@ The `package.json` for *this* project includes the `markdown` npm module.
 `index.js` contains:
 
 ```js
-'use strict';
-
-var markdown = require('markdown').markdown;
-
 module.exports = function (resolve, reject, data) {
   try {
-    resolve(markdown.toHTML(data.source));
+    var res = markdown.toHTML(data.source);
+    resolve({
+      errors: null,
+      result: res
+    });
   } catch (e) {
-    reject(e);
+    var errors = {
+      line: null,
+      ch: null,
+      msg: e
+    };
+    resolve({
+      errors: [errors],
+      result: null
+    });
   }
 };
 ```
 
 Now the processor server can handle requests for markdown conversion.
 
-## Installing and using ruby deps
+Note that the actually processor won't need to `reject`, if the processor has errors, then these are considered runtime errors and they are sent back to the requester.
 
-To use the Gemfile you should first install bundler with `gem install bundler`, from here you can run `bundle install` and that'll install all the deps from Gemfile.
+### Response object
 
-When adding a dependancy, just stick `gem "depname"` at the bottom of the Gemfile, run `bundle install` and add both `Gemfile` and `Gemfile.lock` to the repo.
+The target processor returns an object with `result` (the processed code) and `errors` an array of compilation errors.
 
-You dont have to install purely via gems, you can install from git as well, and use aliases for local copies, which is all covered on the [bundler website](http://bundler.io/v1.6/gemfile.html).
+Pennyworth will return a single object with `output` (from the processor) and `error` (if there's any system level errors, like timeouts):
+
+```js
+{
+  output: {
+    result: "<string>",
+    errors: null, // or: [{ line: x, ch: y, msg: string }, ... ]
+  },
+  error: null, // or Error object
+}
+```
