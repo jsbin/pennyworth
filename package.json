@@ -5,7 +5,7 @@
   "main": "lib/server.js",
   "scripts": {
     "start": "node lib/server.js",
-    "test": "node_modules/mocha/bin/_mocha --timeout 15000 test/{**,**/*}/*.test.js",
+    "test": "HOST=0.0.0.0 node_modules/mocha/bin/_mocha --timeout 15000 test/{**,**/*}/*.test.js",
     "postinstall": "sh bootstrap.sh"
   },
   "author": "Remy Sharp",
