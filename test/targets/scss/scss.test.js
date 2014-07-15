@@ -41,8 +41,8 @@ describe('SCSS with Compass', function () {
         fs.unlink(__dirname + output + 'sass/_' + fileName + '._' + ext);
         fs.unlink(__dirname + output + 'stylesheets/_' + fileName + '._.css');
         (res.error === null).should.be.true;
-        res.result[check].should.exist;
-        (res.result[ncheck] === null).should.be.true;
+        res.output[check].should.exist;
+        (res.output[ncheck] === null).should.be.true;
         done();
       });
     });
@@ -62,8 +62,8 @@ describe('SCSS with Compass', function () {
         fs.unlink(__dirname + output + 'sass/_' + fileName + '._' + ext);
         fs.unlink(__dirname + output + 'stylesheets/_' + fileName + '._.css');
         (res.error === null).should.be.true;
-        res.result[check].should.exist;
-        (res.result[ncheck] === null).should.be.true;
+        res.output[check].should.exist;
+        (res.output[ncheck] === null).should.be.true;
         done();
       });
     });
@@ -83,14 +83,14 @@ describe('SCSS with Compass', function () {
           url: '_' + imp,
           revision: '1'
         }, function(res) {
-          if (res.error === null && res.result.result !== null) {
+          if (res.error === null && res.output.result !== null) {
             resolve();
           } else {
             fs.unlink(__dirname + output + 'sass/_' + imp + '.1' + ext);
             fs.unlink(__dirname + output + 'stylesheets/_' + imp + '.1.css');
             (res.error === null).should.be.true;
-            res.result[ncheck].should.exist;
-            (res.result[check] === null).should.be.true;
+            res.output[ncheck].should.exist;
+            (res.output[check] === null).should.be.true;
             done();
           }
         });
@@ -108,8 +108,8 @@ describe('SCSS with Compass', function () {
           fs.unlink(__dirname + output + 'sass/_' + imp + '.1' + ext);
           fs.unlink(__dirname + output + 'stylesheets/_' + imp + '.1.css');
           (res.error === null).should.be.true;
-          res.result[check].should.exist;
-          (res.result[ncheck] === null).should.be.true;
+          res.output[check].should.exist;
+          (res.output[ncheck] === null).should.be.true;
           done();
         });
       });
@@ -130,8 +130,8 @@ describe('SCSS with Compass', function () {
         fs.unlink(__dirname + output + 'sass/_' + fileName + '._' + ext);
         fs.unlink(__dirname + output + 'stylesheets/_' + fileName + '._.css');
         (res.error === null).should.be.true;
-        res.result[check].should.exist;
-        (res.result[ncheck] === null).should.be.true;
+        res.output[check].should.exist;
+        (res.output[ncheck] === null).should.be.true;
         done();
       });
     });
@@ -153,8 +153,8 @@ describe('SCSS with Compass', function () {
         fs.unlink(__dirname + output + 'sass/_' + fileName + '._' + ext);
         fs.unlink(__dirname + output + 'stylesheets/_' + fileName + '._.css');
         (res.error === null).should.be.true;
-        res.result[check].should.exist;
-        (res.result[ncheck] === null).should.be.true;
+        res.output[check].should.exist;
+        (res.output[ncheck] === null).should.be.true;
         done();
       });
     });
@@ -174,8 +174,8 @@ describe('SCSS with Compass', function () {
         fs.unlink(__dirname + output + 'sass/_' + fileName + '._' + ext);
         fs.unlink(__dirname + output + 'stylesheets/_' + fileName + '._.css');
         (res.error === null).should.be.true;
-        res.result[check].should.exist;
-        (res.result[ncheck] === null).should.be.true;
+        res.output[check].should.exist;
+        (res.output[ncheck] === null).should.be.true;
         done();
       });
     });

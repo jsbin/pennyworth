@@ -24,8 +24,8 @@ describe('Stylus', function () {
         source: file.toString()
       }, function (res) {
         (res.error === null).should.be.true;
-        (res.result.errors === null).should.be.true;
-        res.result.result.should.exist;
+        (res.output.errors === null).should.be.true;
+        res.output.result.should.exist;
         done();
       });
     });
@@ -38,8 +38,8 @@ describe('Stylus', function () {
         source: file.toString()
       }, function (res) {
         (res.error === null).should.be.true;
-        (res.result.result === null).should.be.true;
-        res.result.errors.should.exist;
+        (res.output.result === null).should.be.true;
+        res.output.errors.should.exist;
         done();
       });
     });
