@@ -14,7 +14,3 @@ bundle install
 
 cd vendor/sass-frameworks
 bourbon install
-cd ../../targets/sass/output
-compass init
-cd ../../scss/output
-compass init

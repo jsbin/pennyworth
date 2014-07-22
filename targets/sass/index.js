@@ -10,30 +10,46 @@ var spawn = require('child_process').spawn;
 
 var output = path.join(__dirname, 'output');
 
-// make folder and create compass project
-fs.mkdir(output, function (error) {
-  if (!error) {
-    // FIXME we should actuall install compass to the travis box pre-test
-    try {
-      spawn('compass', ['create', '--syntax', 'sass'], {
-        cwd: output
+var makeProject = function(output, isSass) {
+  var configFile = 'config.rb';
+
+  // make folder and create compass project
+  fs.mkdir(output, function (error) {
+    if (!error) {
+      // copy config.rb
+      var w = fs.createWriteStream(output + '/' + configFile);
+      var r = fs.createReadStream(configFile).pipe(w);
+      
+      if (isSass) {
+        r.on('finish', function(){
+          fs.createWriteStream(output + '/' + configFile, {flags: 'a'}).write('\npreferred_syntax = :sass');
+        });
+      }
+      
+      // FIXME we should actuall install compass to the travis box pre-test
+      try {
+        spawn('compass', ['init'], {
+          cwd: output
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      // check for project files
+      var projFiles = ['config.rb', 'sass', 'stylesheets'];
+      projFiles.forEach(function (name) {
+        var file = path.join(output, name);
+        fs.exists(file, function (exists) {
+          if (!exists) {
+            console.log('Error: ' + file + ' not created');
+          }
+        });
       });
-    } catch (e) {
-      console.log(e);
     }
-  } else {
-    // check for project files
-    var projFiles = ['config.rb', 'sass', 'stylesheets'];
-    projFiles.forEach(function (name) {
-      var file = path.join(output, name);
-      fs.exists(file, function (exists) {
-        if (!exists) {
-          console.log('Error: ' + file + ' not created');
-        }
-      });
-    });
-  }
-});
+  });
+};
+
+makeProject(output, true);
 
 module.exports = function (resolve, reject, data) {
   var ext = data.ext || module.exports.ext;
@@ -115,3 +131,4 @@ module.exports = function (resolve, reject, data) {
 
 module.exports.ext = '.sass';
 module.exports.output = output;
+module.exports.makeProject = makeProject;

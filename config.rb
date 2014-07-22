@@ -1,7 +1,12 @@
-$url = "http://jsbin.com/"
-$timeout = 5 # in seconds
+require "../../../lib/sass_config.rb"
+add_import_path "../../../vendor/sass-frameworks"
 
-require File.join(File.dirname(__FILE__), 'lib/', 'importer.rb')
-require File.join(File.dirname(__FILE__), 'lib/', 'importer_http.rb')
-Sass.load_paths << Sass::Importers::JSBin.new()
-Sass.load_paths << Sass::Importers::HTTP.new($url, $timeout)
+require 'compass/import-once/activate'
+# Require any additional compass plugins here.
+
+# Set this to the root of your project when deployed:
+http_path = "/"
+css_dir = "stylesheets"
+sass_dir = "sass"
+images_dir = "images"
+javascripts_dir = "javascripts"
