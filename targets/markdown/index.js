@@ -1,10 +1,10 @@
 'use strict';
 
-var markdown = require('markdown').markdown;
+var marked = require('marked');
 
 module.exports = function (resolve, reject, data) {
   try {
-    var res = markdown.toHTML(data.source);
+    var res = marked(data.source);
     resolve({
       errors: null,
       result: res
