@@ -18,8 +18,8 @@ var makeProject = function(output, isSass) {
     if (!error) {
       // copy config.rb
       var w = fs.createWriteStream(output + '/' + configFile);
-      var r = fs.createReadStream(configFile).pipe(w);
-      
+      var r = fs.createReadStream(path.join(__dirname, '..', '..', configFile)).pipe(w);
+
       if (isSass) {
         r.on('finish', function(){
           fs.createWriteStream(output + '/' + configFile, {flags: 'a'}).write('\npreferred_syntax = :sass');
@@ -32,7 +32,8 @@ var makeProject = function(output, isSass) {
           cwd: output
         });
       } catch (e) {
-        console.log(e);
+        console.error('Failed compass init');
+        console.error(e);
       }
     } else {
       // check for project files
