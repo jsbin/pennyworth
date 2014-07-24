@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node lib/server.js",
     "test": "HOST=0.0.0.0 node_modules/mocha/bin/_mocha --timeout 15000 test/{**,**/*}/*.test.js",
-    "postinstall": "sh bootstrap.sh"
+    "gems": "sh bootstrap.sh"
   },
   "author": "Remy Sharp",
   "license": "MIT",
