@@ -99,3 +99,9 @@ All tests live in the `test/targets` directory and can be run with `npm test` fr
 3. `broken.md` contains an example of broken code that will return errors.
 4. `sample.md` contains an example of working code that will return the parsed output correctly (replace the extension of these files with the appropriate one).
 5. Tests should check for both positive and negative outcomes: at least one test should check `sample.md` file and compile it without errors returning the expected result; at least one test should check `broken.md` file and return compilation errors.
+
+## License
+
+MIT / http://jsbin.mit-license.org
+
+
