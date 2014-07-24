@@ -13,8 +13,16 @@ All processors live in the `targets` directory, and are structured as so:
 1. Directory name for the target processor (such as `markdown`)
 2. `index.js` will be loaded by the processor server
 3. `module.exports` is a function that receives `resolve`, `reject` and `data`
-4. `data` is an object with `language` (which maps to the target processor) `source`, `url` (i.e. "abc" in [JS Bin's pronounceable urls](http://jsbin.com/help/pronounceable-urls)) and `revision` (for now).
-5. The processor must handle *both* the resolve and the reject.
+4. The processor must handle *both* the resolve and the reject.
+5. `data` is an object structured as:
+
+```js
+{
+  language: "<string>", // maps to target processor
+  source: "<string>", // source text to be processed
+  file: "<string>", // optional filename to create tmp files from, should be unique
+}
+```
 
 ### Simple example with markdown
 
