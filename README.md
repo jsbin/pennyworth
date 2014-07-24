@@ -24,34 +24,38 @@ All processors live in the `targets` directory, and are structured as so:
 }
 ```
 
-### Simple example with markdown
+### Simple example with CoffeeScript
 
 The directory structure:
 
 ```text
 .
 └── targets
-    └── markdown
+    └── coffeescript
         └── index.js
 ```
 
-The `package.json` for *this* project includes the `markdown` npm module.
+The `package.json` for *this* project includes the `coffee-script` npm module.
 
 `index.js` contains:
 
 ```js
+'use strict';
+var coffeescript = require('coffee-script');
+
 module.exports = function (resolve, reject, data) {
   try {
-    var res = markdown.toHTML(data.source);
+    var res = coffeescript.compile(data.source);
     resolve({
       errors: null,
       result: res
     });
   } catch (e) {
+    // index starts at 0
     var errors = {
-      line: null,
-      ch: null,
-      msg: e
+      line: parseInt(e.location.first_line, 10) || 0,
+      ch: parseInt(e.location.first_column, 10) || 0,
+      msg: e.message
     };
     resolve({
       errors: [errors],
