@@ -59,16 +59,6 @@ Note that the actually processor won't need to `reject`, if the processor has er
 
 ### Response object
 
-The target processor returns an object with `result` (the processed code) and `errors` an array of compilation errors.   
-The format of the items in `errors` is:
-```js
-{
-  line: x, // integer with index starting at 0
-  ch: x, // integer with index starting at 0, or null
-  msg: 'string' // error message
-}
-```
-
 Pennyworth will return a single object with `output` (from the processor) and `error` (if there's any system level errors, like timeouts):
 
 ```js
@@ -81,24 +71,48 @@ Pennyworth will return a single object with `output` (from the processor) and `e
 }
 ```
 
-### Ruby gems
+The `output` property contains data if the processor successfully returned a result (be it intended result or otherwise). The `output` object contains `result` (a string representing processed code) and `errors` an *array* of compilation errors.
 
-If the processor needs a ruby gem to run, add it to `Gemfile` to be automatically installed by `npm install`
-```ruby
-gem "nameofthegem"
+The compilation `errors` array contains object structured as:
+
+```js
+{
+  line: x, // integer with index starting at 0
+  ch: y, // integer with index starting at 0, or null
+  msg: 'string' // error message
+}
 ```
 
-[More info](http://bundler.io/v1.3/gemfile.html) about Gemfile and Bundler.
+### Ruby dependencies
+
+Ideally node is used to run each processor, but some processors (like Sass and SCSS) run using Ruby.
+
+If the processor needs a ruby gem to run, add it to `./Gemfile` to be automatically installed by `npm run-script gems`
+
+```ruby
+# Pennyworth Gemfile
+source "https://rubygems.org"
+
+gem "compass", ">= 1.0.0.alpha.19"
+gem "bourbon"
+gem "<your-gem-file>"
+```
+
+[More information about Gemfile and Bundler](http://bundler.io/v1.3/gemfile.html)
 
 ### Tests
 
-All tests live in the `test/targets` directory and can be run with `npm test` from the main pennyworth directory, and are structured as so:
+All processor specific tests live in `test/targets/<processor>/*.test.js` and can be run with `npm test`. They use [Mocha](http://visionmedia.github.io/mocha/) and [should](https://github.com/visionmedia/should.js/).
 
-1. Directory name for the target processor (such as `markdown`)
-2. `markdown.test.js` (replace markdown with the name of the processor) will contain the tests.
-3. `broken.md` contains an example of broken code that will return errors.
-4. `sample.md` contains an example of working code that will return the parsed output correctly (replace the extension of these files with the appropriate one).
-5. Tests should check for both positive and negative outcomes: at least one test should check `sample.md` file and compile it without errors returning the expected result; at least one test should check `broken.md` file and return compilation errors.
+The following outline is our current process for processor tests (using markdown as the example, obviously change names and extensions as appropriate):
+
+1. Directory name for the target processor in `test/targets/markdown`
+2. `markdown.test.js` will contain the tests.
+3. `broken.md` contains code that will return errors.
+4. `sample.md` contains working code that will succesfully parse.
+5. Tests should check for at least one positive and negative outcome.
+
+We welcome more tests and ideas on how to improve this process.
 
 ## License
 
