@@ -4,12 +4,26 @@
 
 // currently only reads from STDIN
 var source = '';
+var fs = require('fs');
 var processors = require('../lib/processors');
 var language = process.argv[2];
 
-if (!language || process.stdin.isTTY === true) {
+if (!language) {
   console.error('Usage: cat file | pennyworth <language>');
   process.exit(1);
+}
+
+function run(source) {
+  processors.run({
+    language: language,
+    source: source
+  }).then(function (result) {
+    console.log(result);
+    process.exit(0);
+  }).catch(function (result) {
+    console.error(result);
+    process.exit(1);
+  });
 }
 
 processors.on('ready', function () {
@@ -18,20 +32,22 @@ processors.on('ready', function () {
     process.exit(1);
   }
 
-  process.stdin.on('data', function (buffer) {
-    source += buffer.toString();
-  }).on('end', function () {
-    processors.run({
-      language: language,
-      source: source
-    }).then(function (result) {
-      console.log(result);
-      process.exit(0);
-    }).catch(function (result) {
-      console.error(result);
-      process.exit(1);
+  if (process.stdin.isTTY === true) {
+    // read from file
+    fs.readFile(process.argsv[3], 'utf8', function (error, source) {
+      if (error) {
+        throw error;
+      }
+
+      run(source);
+    })
+  } else {
+    process.stdin.on('data', function (buffer) {
+      source += buffer.toString();
+    }).on('end', function () {
+      run(source);
     });
-  });
+  }
 }).on('error', function (error) {
   console.error(error);
   process.exit(1);
