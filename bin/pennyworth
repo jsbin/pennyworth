@@ -34,7 +34,7 @@ processors.on('ready', function () {
 
   if (process.stdin.isTTY === true) {
     // read from file
-    fs.readFile(process.argsv[3], 'utf8', function (error, source) {
+    fs.readFile(process.argv[3], 'utf8', function (error, source) {
       if (error) {
         throw error;
       }
@@ -49,6 +49,6 @@ processors.on('ready', function () {
     });
   }
 }).on('error', function (error) {
-  console.error(error);
+  console.error(error.stack);
   process.exit(1);
 });
