@@ -2,4 +2,5 @@ language: node_js
 node_js:
   - "0.10"
 before_install:
+  - npm run-script gems
   - rvm use 1.9.3
