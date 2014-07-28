@@ -181,6 +181,25 @@ describe('Sass with Compass', function () {
     });
   });
 
+    // Loop
+  it('Should process infinite loop and give back "timeout" error', function (done) {
+    var fileName = 'loop';
+    var check = 'result';
+    var ncheck = 'errors';
+    fs.readFile(__dirname + '/' + fileName + ext, function (error, file) {
+      requester.send({
+        language: language,
+        source: file.toString(),
+        url: '_' + fileName,
+        revision: '_'
+      }, function (res) {
+        fs.unlink(__dirname + output + 'sass/_' + fileName + '._' + ext);
+        (res.error === 'timeout').should.be.true;
+        done();
+      });
+    });
+  });
+
 
   after(function () {
     requester.close();
