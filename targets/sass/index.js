@@ -59,7 +59,7 @@ module.exports = function (resolve, reject, data) {
   var sourceFile = path.join('sass', data.file + ext);
 
   fs.writeFile(path.join(output, sourceFile), data.source, function () {
-    var args = ['compile', sourceFile, '--no-line-comments', '--boring'];
+    var args = ['compile', sourceFile, '--no-line-comments', '--boring', '--quiet'];
 
     var compass = spawn('compass', args, {
       cwd: output
