@@ -1,3 +1,5 @@
+[![Travis Status](https://travis-ci.org/jsbin/pennyworth.svg?branch=master)](https://travis-ci.org/jsbin/pennyworth)
+
 # Pennyworth: JS Bin Processors
 
 Pennyworth is the compliment to Jobsworth, handling tasks for Dave the JS Bin bot, and generally running around like a headless chicken turning gobbledegook in to sensible code!
