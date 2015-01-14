@@ -1,6 +1,6 @@
 {
   "name": "jsbin-processors",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "The server side processors server",
   "main": "lib/server.js",
   "scripts": {
