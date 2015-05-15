@@ -1,1 +1,1 @@
-const unique = (array) => [...Set(array)]
+const unique = array => [...Set(array)]
