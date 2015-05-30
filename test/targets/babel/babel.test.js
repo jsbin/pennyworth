@@ -20,7 +20,7 @@ describe('Babel', function () {
   it('Should process valid ES6 and pass back the compiled source', function (done) {
     fs.readFile(__dirname + '/sample.js', function (error, file) {
       requester.send({
-        language: 'es6',
+        language: 'babel',
         source: file.toString()
       }, function (res) {
         (res.error === null).should.be.true;
@@ -34,7 +34,7 @@ describe('Babel', function () {
   it('Should process invalid ES6 and give back an error', function (done) {
     fs.readFile(__dirname + '/broken.js', function (error, file) {
       requester.send({
-        language: 'es6',
+        language: 'babel',
         source: file.toString()
       }, function (res) {
         (res.error === null).should.be.true;
