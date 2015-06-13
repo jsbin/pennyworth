@@ -19,14 +19,14 @@
     "coffee-script": "~1.7.1",
     "express": "~4.1.1",
     "gaze": "~0.6.4",
-    "jade": "~1.4.2",
-    "less": "~1.7.5",
+    "jade": "^1.11.0",
+    "less": "^2.5.1",
     "lynx": "0.0.11",
-    "marked": "^0.3.2",
-    "myth": "~1.1.0",
+    "marked": "^0.3.3",
+    "myth": "^1.4.0",
     "ps-tree": "~0.0.3",
     "rsvp": "~3.0.1",
-    "stylus": "~0.47.1"
+    "stylus": "^0.51.1"
   },
   "devDependencies": {
     "mocha": "~1.18.2",
