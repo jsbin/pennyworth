@@ -23,7 +23,7 @@ var convertToLess = function (resolve, reject, data) {
         result: null
       });
     }
-    var res = css;
+    var res = css.css;
     resolve({
       errors: null,
       result: res
