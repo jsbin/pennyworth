@@ -11,7 +11,6 @@ module.exports = function convertbabel(resolve, reject, data) {
       result: result.code
     });
   } catch (e) {
-    console.log('failed babel');
     var errors = {
       line: e.loc.line - 1,
       ch: e.loc.column,
