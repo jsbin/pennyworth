@@ -8,6 +8,14 @@ This is the server (and sample client) to handle processors. Though most of JS B
 
 This server will respond to zeromq messages with appropriate source types, and respond with the translated output.
 
+## Setting up
+
+To start up simply run:
+
+```js
+HOST=XXX PORT=XXXX node lib/server.js 
+ ```
+
 ## Creating a processor target
 
 All processors live in the `targets` directory, and are structured as so:
