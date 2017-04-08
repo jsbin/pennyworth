@@ -116,7 +116,7 @@ gem "<your-gem-file>"
 
 ### Tests
 
-All processor specific tests live in `test/targets/<processor>/*.test.js` and can be run with `npm test`. They use [Mocha](http://visionmedia.github.io/mocha/) and [should](https://github.com/visionmedia/should.js/).
+All processor specific tests live in `test/targets/<processor>/*.test.js` and can be run with `npm test`. They use [Mocha](http://mochajs.org/) and [should](https://github.com/visionmedia/should.js/).
 
 The following outline is our current process for processor tests (using markdown as the example, obviously change names and extensions as appropriate):
 
