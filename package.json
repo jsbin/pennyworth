@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node lib/server.js",
     "test": "HOST=0.0.0.0 node_modules/mocha/bin/_mocha --timeout 15000 test/{**,**/*}/*.test.js",
-    "gems": "sh bootstrap.sh"
+    "gems": "sh bootstrap.sh",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "author": "Remy Sharp",
   "license": "MIT",
@@ -26,10 +28,12 @@
     "myth": "^1.4.0",
     "ps-tree": "~0.0.3",
     "rsvp": "~3.0.1",
-    "stylus": "^0.51.1"
+    "stylus": "^0.51.1",
+    "snyk": "^1.46.0"
   },
   "devDependencies": {
     "mocha": "~1.18.2",
     "should": "~4.0.4"
-  }
+  },
+  "snyk": true
 }
